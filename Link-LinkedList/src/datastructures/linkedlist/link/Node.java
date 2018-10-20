@@ -1,7 +1,7 @@
 package datastructures.linkedlist.link;
 
 public class Node<E> {
-	
+
 	public E getData() {
 		return data;
 	}
@@ -10,27 +10,37 @@ public class Node<E> {
 		this.data = data;
 	}
 
-	public Node<E> getLink() {
-		return link;
+	public Node<E> getNext() {
+		return next;
 	}
 
-	public void setLink(Node<E> link) {
-		this.link = link;
+	public void setNext(Node<E> next) {
+		this.next = next;
+	}
+
+	public Node<E> getPrev() {
+		return prev;
+	}
+
+	public void setPrev(Node<E> prev) {
+		this.prev = prev;
 	}
 
 	private E data;
-	private Node<E> link;
-	
-	public Node(E initData, Node<E> initLink){
+	private Node<E> next;
+	private Node<E> prev;
+
+	public Node(E initData, Node<E> initNext, Node<E> initPrev) {
 		data = initData;
-		link = initLink;
+		prev = initPrev;
+		next = initNext;
 	}
-	
+
 	public String toString() {
-		while(data!=null) {
+		while (data != null) {
 			return data.toString();
 		}
 		return null;
 	}
-		
+
 }
