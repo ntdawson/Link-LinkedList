@@ -10,6 +10,11 @@ public class Node<E> {
 		link = initLink;
 	}
 	
-	
+	public String toString() {
+		while(data!=null) {
+			return data.toString();
+		}
+		return null;
+	}
 		
 }
