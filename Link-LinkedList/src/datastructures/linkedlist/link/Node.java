@@ -26,9 +26,9 @@ public class Node<E> {
 		this.prev = prev;
 	}
 
-	private E data;
-	private Node<E> next;
-	private Node<E> prev;
+	public E data;
+	public Node<E> next;
+	public Node<E> prev;
 
 	public Node(E initData, Node<E> initNext, Node<E> initPrev) {
 		data = initData;
