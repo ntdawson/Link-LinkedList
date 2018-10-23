@@ -13,6 +13,7 @@ public class Testing {
 
 		
 		System.out.println(k.get(5));
+		System.out.println(k.removeFirst());
 	}
 
 }

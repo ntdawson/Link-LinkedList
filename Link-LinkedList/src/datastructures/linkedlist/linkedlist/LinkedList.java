@@ -64,15 +64,15 @@ public class LinkedList<E> {
 			E e = (E) o;
 			Node<E> newNode = new Node<E>(e, after, before);
 			if (before == null)
-				first = newNode; 
+				first = newNode;
 			else
 				before.next = newNode;
 			before = newNode;
 		}
-		
-		if(after == null) {
+
+		if (after == null) {
 			last = before;
-		}else {
+		} else {
 			before.next = after;
 			after.prev = before;
 		}
@@ -104,12 +104,59 @@ public class LinkedList<E> {
 			return x;
 		}
 	}
-	
+
 	public E getFirst() {
 		final Node<E> f = first;
-		if(f==null)
+		if (f == null)
 			throw new NoSuchElementException();
 		return f.data;
+	}
+
+	public E unlinkFirst(Node<E> f) {
+		final E data = f.data;
+		final Node<E> next = f.next;
+		f.data = null;
+		f.next = null;
+		first = next;
+		if (next == null)
+			last = null;
+		else
+			next.prev = null;
+
+		size--;
+		return data;
+
+	}
+
+	public E unlinkLast(Node<E> l) {
+		final E data = l.data;
+		final Node<E> prev = l.prev;
+		l.data = null;
+		l.prev = null;
+		last = prev;
+		if (last == null)
+			first = null;
+		else
+			prev.next = null;
+		size--;
+		return data;
+
+	}
+
+	public E removeFirst() {
+		final Node<E> f = first;
+		if (f == null) {
+			throw new NoSuchElementException();
+		}
+		return unlinkFirst(f);
+	}
+
+	public E removeLast() {
+		final Node<E> l = last;
+		if (l == null) {
+			throw new NoSuchElementException();
+		}
+		return unlinkLast(l);
 	}
 
 }
