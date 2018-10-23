@@ -129,7 +129,7 @@ public class LinkedList<E> {
 		first = next;
 		if (next == null)
 			last = null;
-		else
+		else 
 			next.prev = null;
 
 		size--;
