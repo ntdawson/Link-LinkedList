@@ -98,10 +98,14 @@ public class LinkedList<E> {
 	}
 
 	Node<E> node(int index) {
+
 		/*
-		 * "size >> 1" is a cute way to handle 0 and 1 size lists bitwise shifting in
-		 * this instance is basically dividing by 2 with no remainder
+		 * bitwise shifting in this case is dividing by 2 with no remainder. this allows
+		 * us to determine on what 'side' of our list the index is on. Then, walk up or
+		 * down the list as necessary to reach the object. Much faster than starting
+		 * from first for every situation, especially with large lists.
 		 */
+
 		if (index < (size >> 1)) {
 			Node<E> x = first;
 			for (int i = 0; i < index; i++)
