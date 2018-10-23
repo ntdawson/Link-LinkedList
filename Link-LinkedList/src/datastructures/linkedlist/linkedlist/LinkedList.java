@@ -22,24 +22,6 @@ public class LinkedList<E> {
 	}
 
 	/*
-	 * Insert collection into this list
-	 */
-	public boolean addAll(Collection<? extends E> c) {
-		return addAll(size, c);
-	}
-
-	// We're going to need this a lot...
-	private void checkPositionByIndex(int index) {
-		if (!positionExists(index)) {
-			throw new IndexOutOfBoundsException("That index refers to nothing in this list");
-		}
-	}
-
-	private boolean positionExists(int index) {
-		return index >= 0 && index <= size;
-	}
-
-	/*
 	 * Insert collection into list at specific index
 	 */
 	public boolean addAll(int index, Collection<? extends E> c) {
@@ -86,20 +68,39 @@ public class LinkedList<E> {
 
 	}
 
+	/*
+	 * Insert collection into this list
+	 */
+	public boolean addAll(Collection<? extends E> c) {
+		return addAll(size, c);
+	}
+
+	public void add(int index, E element) {
+		checkPositionByIndex(index);
+
+		if (index == size) {
+			linkLast(element);
+		} else {
+			linkBefore(element, node(index));
+		}
+	}
+
 	public E get(int index) {
 		checkPositionByIndex(index);
 		return node(index).getData();
 	}
 
-	public E remove(int index) {
-		checkPositionByIndex(index);
-		return unlink(node(index));
+	public E getFirst() {
+		final Node<E> f = first;
+		if (f == null)
+			throw new NoSuchElementException();
+		return f.data;
 	}
 
 	Node<E> node(int index) {
 		/*
 		 * "size >> 1" is a cute way to handle 0 and 1 size lists bitwise shifting in
-		 * this instance is basically dividing size by 2
+		 * this instance is basically dividing by 2 with no remainder
 		 */
 		if (index < (size >> 1)) {
 			Node<E> x = first;
@@ -112,84 +113,6 @@ public class LinkedList<E> {
 				x = x.prev;
 			return x;
 		}
-	}
-
-	public E getFirst() {
-		final Node<E> f = first;
-		if (f == null)
-			throw new NoSuchElementException();
-		return f.data;
-	}
-
-	public E unlinkFirst(Node<E> f) {
-		final E data = f.data;
-		final Node<E> next = f.next;
-		f.data = null;
-		f.next = null;
-		first = next;
-		if (next == null)
-			last = null;
-		else 
-			next.prev = null;
-
-		size--;
-		return data;
-
-	}
-
-	public E unlinkLast(Node<E> l) {
-		final E data = l.data;
-		final Node<E> prev = l.prev;
-		l.data = null;
-		l.prev = null;
-		last = prev;
-		if (last == null)
-			first = null;
-		else
-			prev.next = null;
-		size--;
-		return data;
-
-	}
-
-	public E removeFirst() {
-		final Node<E> f = first;
-		if (f == null) {
-			throw new NoSuchElementException();
-		}
-		return unlinkFirst(f);
-	}
-
-	public E removeLast() {
-		final Node<E> l = last;
-		if (l == null) {
-			throw new NoSuchElementException();
-		}
-		return unlinkLast(l);
-	}
-
-	E unlink(Node<E> x) {
-		final E data = x.data;
-		final Node<E> next = x.next;
-		final Node<E> prev = x.prev;
-
-		if (prev == null) {
-			first = next;
-		} else {
-			prev.next = first;
-			x.prev = null;
-		}
-
-		if (next == null) {
-			last = prev;
-		} else {
-			next.prev = prev;
-			x.next = null;
-		}
-
-		x.data = null;
-		size--;
-		return data;
 	}
 
 	void linkLast(E e) {
@@ -228,14 +151,107 @@ public class LinkedList<E> {
 		size++;
 	}
 
-	public void add(int index, E element) {
-		checkPositionByIndex(index);
+	E unlink(Node<E> x) {
+		final E data = x.data;
+		final Node<E> next = x.next;
+		final Node<E> prev = x.prev;
 
-		if (index == size) {
-			linkLast(element);
+		if (prev == null) {
+			first = next;
 		} else {
-			linkBefore(element, node(index));
+			prev.next = first;
+			x.prev = null;
+		}
+
+		if (next == null) {
+			last = prev;
+		} else {
+			next.prev = prev;
+			x.next = null;
+		}
+
+		x.data = null;
+		size--;
+		return data;
+	}
+
+	public E unlinkFirst(Node<E> f) {
+		final E data = f.data;
+		final Node<E> next = f.next;
+		f.data = null;
+		f.next = null;
+		first = next;
+		if (next == null)
+			last = null;
+		else
+			next.prev = null;
+
+		size--;
+		return data;
+
+	}
+
+	public E unlinkLast(Node<E> l) {
+		final E data = l.data;
+		final Node<E> prev = l.prev;
+		l.data = null;
+		l.prev = null;
+		last = prev;
+		if (last == null)
+			first = null;
+		else
+			prev.next = null;
+		size--;
+		return data;
+
+	}
+
+	public E remove(int index) {
+		checkPositionByIndex(index);
+		return unlink(node(index));
+	}
+
+	public E removeFirst() {
+		final Node<E> f = first;
+		if (f == null) {
+			throw new NoSuchElementException();
+		}
+		return unlinkFirst(f);
+	}
+
+	public E removeLast() {
+		final Node<E> l = last;
+		if (l == null) {
+			throw new NoSuchElementException();
+		}
+		return unlinkLast(l);
+	}
+
+	public void clear() {
+		for (Node<E> x = first; x != null;) {
+			Node<E> next = x.next;
+			x.data = null;
+			x.prev = null;
+			x.next = null;
+			x = next;
+		}
+		first = last = null;
+		size = 0;
+	}
+
+	/*
+	 * Error checking methods
+	 */
+	private void checkPositionByIndex(int index) {
+		if (!positionExists(index)) {
+			throw new IndexOutOfBoundsException("That index refers to nothing in this list");
 		}
 	}
-	
+
+	private boolean positionExists(int index) {
+		return index >= 0 && index <= size;
+	}
+	/*
+	 * 
+	 */
 }
