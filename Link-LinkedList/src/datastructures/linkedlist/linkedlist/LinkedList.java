@@ -11,9 +11,11 @@ public class LinkedList<E> {
 	transient Node<E> first;
 	transient Node<E> last;
 
+	// blank constructor
 	public LinkedList() {
 	}
 
+	// constructor that starts with a collection to populate
 	public LinkedList(Collection<? extends E> c) {
 		this();
 		addAll(c);
@@ -26,6 +28,7 @@ public class LinkedList<E> {
 		return addAll(size, c);
 	}
 
+	// We're going to need this a lot...
 	private void checkPositionByIndex(int index) {
 		if (!positionExists(index)) {
 			throw new IndexOutOfBoundsException("That index refers to nothing in this list");
@@ -44,7 +47,8 @@ public class LinkedList<E> {
 
 		Object[] a = c.toArray();
 		int cLength = a.length;
-		System.out.println(cLength);
+		// DEBUG System.out.println(cLength);
+
 		if (cLength == 0) {
 			return false;
 		}
@@ -85,6 +89,11 @@ public class LinkedList<E> {
 	public E get(int index) {
 		checkPositionByIndex(index);
 		return node(index).getData();
+	}
+
+	public E remove(int index) {
+		checkPositionByIndex(index);
+		return unlink(node(index));
 	}
 
 	Node<E> node(int index) {
@@ -149,7 +158,7 @@ public class LinkedList<E> {
 			throw new NoSuchElementException();
 		}
 		return unlinkFirst(f);
-	} 
+	}
 
 	public E removeLast() {
 		final Node<E> l = last;
@@ -159,4 +168,74 @@ public class LinkedList<E> {
 		return unlinkLast(l);
 	}
 
+	E unlink(Node<E> x) {
+		final E data = x.data;
+		final Node<E> next = x.next;
+		final Node<E> prev = x.prev;
+
+		if (prev == null) {
+			first = next;
+		} else {
+			prev.next = first;
+			x.prev = null;
+		}
+
+		if (next == null) {
+			last = prev;
+		} else {
+			next.prev = prev;
+			x.next = null;
+		}
+
+		x.data = null;
+		size--;
+		return data;
+	}
+
+	void linkLast(E e) {
+		final Node<E> l = last;
+		final Node<E> newNode = new Node<>(e, null, l);
+		last = newNode;
+		if (l == null) {
+			first = newNode;
+		} else {
+			l.next = newNode;
+		}
+		size++;
+	}
+
+	void linkFirst(E e) {
+		final Node<E> f = first;
+		final Node<E> newNode = new Node<>(e, null, f);
+		first = newNode;
+		if (f == null) {
+			first = newNode;
+		} else {
+			f.prev = newNode;
+		}
+		size++;
+	}
+
+	void linkBefore(E e, Node<E> after) {
+		final Node<E> before = after.prev;
+		final Node<E> newNode = new Node<>(e, after, before);
+		after.prev = newNode;
+		if (before == null) {
+			first = newNode;
+		} else {
+			before.next = newNode;
+		}
+		size++;
+	}
+
+	public void add(int index, E element) {
+		checkPositionByIndex(index);
+
+		if (index == size) {
+			linkLast(element);
+		} else {
+			linkBefore(element, node(index));
+		}
+	}
+	
 }
