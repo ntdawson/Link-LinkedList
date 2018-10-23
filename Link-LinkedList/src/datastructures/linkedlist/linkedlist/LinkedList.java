@@ -149,7 +149,7 @@ public class LinkedList<E> {
 			throw new NoSuchElementException();
 		}
 		return unlinkFirst(f);
-	}
+	} 
 
 	public E removeLast() {
 		final Node<E> l = last;
