@@ -7,6 +7,10 @@ import datastructures.linkedlist.link.Node;
 
 public class LinkedList<E> {
 
+	/*
+	 * we don't need to serialize derived information. Also, I don't like
+	 * using @unnused annotations all the time
+	 */
 	transient int size = 0;
 	transient Node<E> first;
 	transient Node<E> last;
@@ -31,10 +35,12 @@ public class LinkedList<E> {
 		int cLength = a.length;
 		// DEBUG System.out.println(cLength);
 
+		// no adding empty collections!
 		if (cLength == 0) {
 			return false;
 		}
 
+		// temp variables for determining where in the list we're adding to
 		Node<E> before, after;
 
 		if (index == size) {
@@ -97,6 +103,7 @@ public class LinkedList<E> {
 		return f.data;
 	}
 
+	// get a node by index.
 	Node<E> node(int index) {
 
 		/*
