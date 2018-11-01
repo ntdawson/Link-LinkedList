@@ -129,11 +129,11 @@ public class LinkedList<E> {
 	public void addLast(E e) {
 		linkLast(e);
 	}
+
 	// add element to beginning
 	public void addFirst(E e) {
 		linkFirst(e);
 	}
-
 
 	// grab the data from a node by index
 	public E get(int index) {
@@ -145,6 +145,10 @@ public class LinkedList<E> {
 	public E getFirst() {
 		final Node<E> f = first;
 		if (f == null)
+			/*
+			 * Don't need to handle unchecked exceptions see
+			 * https://docs.oracle.com/javase/tutorial/essential/exceptions/runtime.html
+			 */
 			throw new NoSuchElementException();
 		return f.data;
 	}
@@ -279,6 +283,10 @@ public class LinkedList<E> {
 	public E removeFirst() {
 		final Node<E> f = first;
 		if (f == null) {
+			/*
+			 * Don't need to handle unchecked exceptions see
+			 * https://docs.oracle.com/javase/tutorial/essential/exceptions/runtime.html
+			 */
 			throw new NoSuchElementException();
 		}
 		return unlinkFirst(f);
@@ -288,6 +296,10 @@ public class LinkedList<E> {
 	public E removeLast() {
 		final Node<E> l = last;
 		if (l == null) {
+			/*
+			 * Don't need to handle unchecked exceptions see
+			 * https://docs.oracle.com/javase/tutorial/essential/exceptions/runtime.html
+			 */
 			throw new NoSuchElementException();
 		}
 		return unlinkLast(l);
@@ -311,6 +323,10 @@ public class LinkedList<E> {
 	 */
 	private void checkPositionByIndex(int index) {
 		if (!positionExists(index)) {
+			/*
+			 * Don't need to handle unchecked exceptions see
+			 * https://docs.oracle.com/javase/tutorial/essential/exceptions/runtime.html
+			 */
 			throw new IndexOutOfBoundsException("That index refers to nothing in this list");
 		}
 	}
@@ -321,4 +337,14 @@ public class LinkedList<E> {
 	/*
 	 * 
 	 */
+
+	public StringBuilder printAll() {
+		StringBuilder s = new StringBuilder();
+		s.append("The LinkedList currently contains the following elements: " + System.lineSeparator());
+		for (int i = 0; i < size; i++) {
+			s.append(this.get(i) + ", ");
+		}
+		s.append(System.lineSeparator() + "End of List.");
+		return s;
+	}
 }
